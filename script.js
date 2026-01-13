@@ -16,7 +16,8 @@ const database = getDatabase(app);
 const notesRef = ref(database, 'notes');
 const usersRef = ref(database, 'users');
 
-let selectedColor = 'purple';
+const colors = ['yellow', 'pink', 'blue', 'green', 'orange', 'purple'];
+let selectedColor = colors[Math.floor(Math.random() * colors.length)];
 let draggedNote = null;
 let userId = 'user_' + Math.random().toString(36).substr(2, 9);
 
@@ -110,13 +111,21 @@ function updateNoteElement(id, note) {
 
 function createNote() {
     const noteId = push(notesRef).key;
-    const boardRect = document.getElementById('board').getBoundingClientRect();
+    const board = document.getElementById('board');
+    const boardRect = board.getBoundingClientRect();
+    
+    // Color random de todos los disponibles
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    
+    // Posición que considere el scroll actual
+    const scrollTop = board.scrollTop;
+    const scrollLeft = board.scrollLeft;
     
     const note = {
         content: '',
-        color: selectedColor,
-        x: Math.random() * (boardRect.width - 220),
-        y: Math.random() * (boardRect.height - 170),
+        color: randomColor,
+        x: scrollLeft + Math.random() * Math.max(boardRect.width - 250, 100),
+        y: scrollTop + Math.random() * Math.max(boardRect.height - 200, 100),
         timestamp: Date.now()
     };
     
@@ -162,8 +171,11 @@ function setupBoardDragDrop() {
         if (!draggedNote) return;
         
         const boardRect = board.getBoundingClientRect();
-        const x = e.clientX - boardRect.left - 100;
-        const y = e.clientY - boardRect.top - 75;
+        const scrollTop = board.scrollTop;
+        const scrollLeft = board.scrollLeft;
+        
+        const x = e.clientX - boardRect.left + scrollLeft - 110;
+        const y = e.clientY - boardRect.top + scrollTop - 90;
         
         const noteId = draggedNote.dataset.id;
         set(ref(database, `notes/${noteId}/x`), Math.max(0, x));
@@ -184,12 +196,6 @@ function handleDragEnd(e) {
 window.deleteNote = function(noteId) {
     if (confirm('¿Eliminar esta nota?')) {
         remove(ref(database, `notes/${noteId}`));
-    }
-}
-
-window.clearAllNotes = function() {
-    if (confirm('¿Eliminar todas las notas? Esta acción no se puede deshacer.')) {
-        remove(notesRef);
     }
 }
 
