@@ -1,6 +1,15 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getDatabase, ref, onValue, set, remove, onDisconnect, push } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-import { firebaseConfig } from './firebase-config.js';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDoMF-1vjmfbVZ1GMtJdYQyvo32dtMleLQ",
+    authDomain: "live-sync-classroom.firebaseapp.com",
+    databaseURL: "https://live-sync-classroom-default-rtdb.firebaseio.com",
+    projectId: "live-sync-classroom",
+    storageBucket: "live-sync-classroom.firebasestorage.app",
+    messagingSenderId: "358193733860",
+    appId: "1:358193733860:web:8899c2c4a21e17eacf0cf1"
+};
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
