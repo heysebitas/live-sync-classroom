@@ -60,6 +60,7 @@ h1 {
     gap: 15px;
     align-items: center;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .add-note-btn {
@@ -103,6 +104,46 @@ h1 {
     box-shadow: 0 0 0 2px #667eea;
 }
 
+.zoom-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-btn {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zoom-btn:hover {
+    background: #667eea;
+    color: white;
+    transform: scale(1.05);
+}
+
+.zoom-level {
+    min-width: 50px;
+    text-align: center;
+    font-weight: 600;
+    color: #667eea;
+    font-size: 14px;
+}
+
 .clear-btn {
     background: rgba(239, 68, 68, 0.9);
     color: white;
@@ -119,33 +160,53 @@ h1 {
     background: rgb(220, 38, 38);
 }
 
-.board {
+.board-container {
     flex: 1;
     width: 100%;
     margin: 0 auto 20px;
-    padding: 20px;
+    overflow: hidden;
     position: relative;
-    /* Tablero infinito real - mucho más espacio */
-    min-height: calc(100vh - 250px);
-    max-height: calc(100vh - 250px);
+}
+
+.board {
+    width: 100%;
+    height: calc(100vh - 250px);
     overflow: auto;
-    /* Crear un canvas grande virtual */
+    position: relative;
+    /* Scrollbars personalizados */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.board::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.board::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.board::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.board::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.board-content {
+    min-width: 5000px;
+    min-height: 5000px;
+    position: relative;
+    transition: transform 0.2s ease;
+    /* Grid de fondo */
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
     background-size: 50px 50px;
-    background-position: 0 0;
-}
-
-.board::after {
-    content: '';
-    position: absolute;
-    /* Crear un espacio virtual enorme */
-    width: 5000px;
-    height: 5000px;
-    top: 0;
-    left: 0;
-    pointer-events: none;
 }
 
 .empty-state {
@@ -167,6 +228,7 @@ h1 {
     position: absolute;
     width: 220px;
     min-height: 180px;
+    max-height: none;
     padding: 18px;
     border-radius: 12px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
@@ -223,6 +285,10 @@ h1 {
     color: #333;
     outline: none;
     line-height: 1.5;
+    min-height: 100px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .note-yellow { 
@@ -293,20 +359,66 @@ footer a:hover {
         height: 42px;
     }
     
+    .zoom-controls {
+        width: 100%;
+        justify-content: center;
+    }
+    
     .sticky-note {
-        width: 180px;
-        min-height: 140px;
+        width: 200px;
+        min-height: 160px;
+        max-height: 400px;
         font-size: 15px;
+        padding: 15px;
     }
     
     .note-content {
         font-size: 15px;
+        min-height: 120px;
+        max-height: 350px;
     }
     
     .board {
+        height: calc(100vh - 380px);
+    }
+}
+    .add-note-btn {
+        width: 100%;
+        padding: 14px;
+        font-size: 1.1rem;
+    }
+    
+    .color-picker {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .color-btn {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .zoom-controls {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .sticky-note {
+        width: 200px;
+        min-height: 160px;
+        max-height: 400px;
+        font-size: 15px;
         padding: 15px;
-        min-height: calc(100vh - 320px);
-        max-height: calc(100vh - 320px);
+    }
+    
+    .note-content {
+        font-size: 15px;
+        min-height: 120px;
+        max-height: 350px;
+    }
+    
+    .board {
+        height: calc(100vh - 320px);
     }
 }
 
@@ -324,12 +436,15 @@ footer a:hover {
     }
     
     .sticky-note {
-        width: 150px;
-        min-height: 130px;
+        width: 170px;
+        min-height: 150px;
+        max-height: 500px;
         padding: 12px;
     }
     
     .note-content {
         font-size: 14px;
+        min-height: 100px;
+        max-height: 450px;
     }
 }

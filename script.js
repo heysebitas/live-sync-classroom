@@ -21,11 +21,19 @@ let selectedColor = colors[Math.floor(Math.random() * colors.length)];
 let draggedNote = null;
 let userId = 'user_' + Math.random().toString(36).substr(2, 9);
 
+// Sistema de zoom
+let currentZoom = 1;
+const minZoom = 0.3;
+const maxZoom = 2;
+const zoomStep = 0.1;
+
 function init() {
     setupColorPicker();
     setupUserPresence();
     listenToNotes();
     setupBoardDragDrop();
+    setupZoom();
+    detectMobileAndSetZoom();
 }
 
 function setupColorPicker() {
@@ -54,11 +62,11 @@ function setupUserPresence() {
 function listenToNotes() {
     onValue(notesRef, (snapshot) => {
         const notes = snapshot.val();
-        const board = document.getElementById('board');
+        const boardContent = document.getElementById('boardContent');
         const emptyState = document.getElementById('emptyState');
         
         if (!notes || Object.keys(notes).length === 0) {
-            board.querySelectorAll('.sticky-note').forEach(note => note.remove());
+            boardContent.querySelectorAll('.sticky-note').forEach(note => note.remove());
             emptyState.style.display = 'block';
             return;
         }
@@ -66,7 +74,7 @@ function listenToNotes() {
         emptyState.style.display = 'none';
         
         const existingNotes = new Set(
-            Array.from(board.querySelectorAll('.sticky-note')).map(el => el.dataset.id)
+            Array.from(boardContent.querySelectorAll('.sticky-note')).map(el => el.dataset.id)
         );
         
         Object.entries(notes).forEach(([id, note]) => {
@@ -79,7 +87,7 @@ function listenToNotes() {
         });
         
         existingNotes.forEach(id => {
-            const noteEl = board.querySelector(`[data-id="${id}"]`);
+            const noteEl = boardContent.querySelector(`[data-id="${id}"]`);
             if (noteEl) noteEl.remove();
         });
     });
@@ -134,7 +142,7 @@ function createNote() {
 }
 
 function createNoteElement(id, note) {
-    const board = document.getElementById('board');
+    const boardContent = document.getElementById('boardContent');
     const noteEl = document.createElement('div');
     noteEl.className = `sticky-note note-${note.color}`;
     noteEl.style.left = note.x + 'px';
@@ -157,7 +165,7 @@ function createNoteElement(id, note) {
     noteEl.addEventListener('dragstart', handleDragStart);
     noteEl.addEventListener('dragend', handleDragEnd);
     
-    board.appendChild(noteEl);
+    boardContent.appendChild(noteEl);
 }
 
 function setupBoardDragDrop() {
@@ -201,5 +209,76 @@ window.deleteNote = function(noteId) {
 }
 
 window.createNote = createNote;
+
+// Funciones de zoom
+function setupZoom() {
+    const boardContent = document.getElementById('boardContent');
+    
+    // Soporte para pinch-to-zoom en móvil
+    let initialDistance = 0;
+    let initialZoom = 1;
+    
+    boardContent.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            initialDistance = getDistance(e.touches[0], e.touches[1]);
+            initialZoom = currentZoom;
+        }
+    });
+    
+    boardContent.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const distance = getDistance(e.touches[0], e.touches[1]);
+            const scale = distance / initialDistance;
+            setZoom(initialZoom * scale);
+        }
+    }, { passive: false });
+}
+
+function getDistance(touch1, touch2) {
+    const dx = touch1.clientX - touch2.clientX;
+    const dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+function detectMobileAndSetZoom() {
+    // Detectar si es móvil y establecer zoom inicial reducido
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+        setZoom(0.5); // Vista alejada por defecto en móvil
+    }
+}
+
+function setZoom(zoom) {
+    currentZoom = Math.max(minZoom, Math.min(maxZoom, zoom));
+    const boardContent = document.getElementById('boardContent');
+    boardContent.style.transform = `scale(${currentZoom})`;
+    boardContent.style.transformOrigin = '0 0';
+    
+    // Ajustar el tamaño del contenedor para mantener el scroll
+    boardContent.style.width = `${100 / currentZoom}%`;
+    boardContent.style.height = `${100 / currentZoom}%`;
+    
+    updateZoomDisplay();
+}
+
+function updateZoomDisplay() {
+    const zoomLevel = document.getElementById('zoomLevel');
+    if (zoomLevel) {
+        zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
+    }
+}
+
+window.zoomIn = function() {
+    setZoom(currentZoom + zoomStep);
+}
+
+window.zoomOut = function() {
+    setZoom(currentZoom - zoomStep);
+}
+
+window.resetZoom = function() {
+    setZoom(1);
+}
 
 init();
