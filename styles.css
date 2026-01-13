@@ -426,11 +426,6 @@ h1 {
         height: 42px;
     }
     
-    .zoom-controls {
-        width: 100%;
-        justify-content: center;
-    }
-    
     .sticky-note {
         width: 200px;
         min-height: 160px;
@@ -443,49 +438,6 @@ h1 {
         font-size: 15px;
         min-height: 120px;
         max-height: 350px;
-    }
-    
-    .board {
-        height: calc(100vh - 380px);
-    }
-}
-    .add-note-btn {
-        width: 100%;
-        padding: 14px;
-        font-size: 1.1rem;
-    }
-    
-    .color-picker {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .color-btn {
-        width: 42px;
-        height: 42px;
-    }
-    
-    .zoom-controls {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .sticky-note {
-        width: 200px;
-        min-height: 160px;
-        max-height: 400px;
-        font-size: 15px;
-        padding: 15px;
-    }
-    
-    .note-content {
-        font-size: 15px;
-        min-height: 120px;
-        max-height: 350px;
-    }
-    
-    .board {
-        height: calc(100vh - 320px);
     }
 }
 
