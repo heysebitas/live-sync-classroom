@@ -22,14 +22,36 @@ Uses Firebase Realtime Database to sync notes across all connected users:
 
 https://heysebitas.github.io/live-sync-classroom/
 
+## Setup Firebase (Required)
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project (free tier is enough)
+3. Enable **Realtime Database**:
+   - Go to Build → Realtime Database → Create Database
+   - Start in **test mode** (for demo purposes)
+4. Get your config:
+   - Project Settings → General → Your apps → Web app
+   - Copy the firebaseConfig object
+5. Create `firebase-config.js` in the project root:
+   ```bash
+   cp firebase-config.example.js firebase-config.js
+   ```
+6. Paste your Firebase credentials in `firebase-config.js`
+
 ## Run Locally
 
 1. Clone this repository
-2. Open `index.html` in your browser
-3. Share the URL with your team
-4. Start collaborating!
+2. Setup Firebase (see above)
+3. Open `index.html` with a local server:
+   ```bash
+   npx http-server
+   # or
+   python -m http.server 8000
+   ```
+4. Share the URL with your team
+5. Start collaborating!
 
-No build process or dependencies needed - pure HTML/CSS/JavaScript with Firebase.
+**Note:** Firebase config is NOT included in the repo for security. You must create your own Firebase project.
 
 ## Features
 

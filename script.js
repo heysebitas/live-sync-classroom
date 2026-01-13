@@ -1,15 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getDatabase, ref, onValue, set, remove, onDisconnect, push } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-
-const firebaseConfig = {
-    apiKey: "AIzaSyBqK8J9X5Z5Z5Z5Z5Z5Z5Z5Z5Z5Z5Z5Z5Z",
-    authDomain: "live-sync-demo.firebaseapp.com",
-    databaseURL: "https://live-sync-demo-default-rtdb.firebaseio.com",
-    projectId: "live-sync-demo",
-    storageBucket: "live-sync-demo.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef123456"
-};
+import { firebaseConfig } from './firebase-config.js';
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
@@ -56,19 +47,56 @@ function listenToNotes() {
         const board = document.getElementById('board');
         const emptyState = document.getElementById('emptyState');
         
-        board.querySelectorAll('.sticky-note').forEach(note => note.remove());
-        
         if (!notes || Object.keys(notes).length === 0) {
+            board.querySelectorAll('.sticky-note').forEach(note => note.remove());
             emptyState.style.display = 'block';
             return;
         }
         
         emptyState.style.display = 'none';
         
+        const existingNotes = new Set(
+            Array.from(board.querySelectorAll('.sticky-note')).map(el => el.dataset.id)
+        );
+        
         Object.entries(notes).forEach(([id, note]) => {
-            createNoteElement(id, note);
+            if (existingNotes.has(id)) {
+                updateNoteElement(id, note);
+                existingNotes.delete(id);
+            } else {
+                createNoteElement(id, note);
+            }
+        });
+        
+        existingNotes.forEach(id => {
+            const noteEl = board.querySelector(`[data-id="${id}"]`);
+            if (noteEl) noteEl.remove();
         });
     });
+}
+
+function updateNoteElement(id, note) {
+    const noteEl = document.querySelector(`[data-id="${id}"]`);
+    if (!noteEl) return;
+    
+    const textarea = noteEl.querySelector('.note-content');
+    if (document.activeElement !== textarea && textarea.value !== note.content) {
+        textarea.value = note.content || '';
+    }
+    
+    if (noteEl.style.left !== note.x + 'px') {
+        noteEl.style.left = note.x + 'px';
+    }
+    if (noteEl.style.top !== note.y + 'px') {
+        noteEl.style.top = note.y + 'px';
+    }
+    
+    const currentColor = Array.from(noteEl.classList).find(c => c.startsWith('note-'));
+    const newColor = 'note-' + note.color;
+    if (currentColor !== newColor) {
+        noteEl.classList.remove(currentColor);
+        noteEl.classList.add(newColor);
+    }
 }
 
 function createNote() {
