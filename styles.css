@@ -125,10 +125,27 @@ h1 {
     margin: 0 auto 20px;
     padding: 20px;
     position: relative;
+    /* Tablero infinito real - mucho más espacio */
     min-height: calc(100vh - 250px);
-    overflow: auto;
-    /* Tablero infinito con scroll */
     max-height: calc(100vh - 250px);
+    overflow: auto;
+    /* Crear un canvas grande virtual */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: 0 0;
+}
+
+.board::after {
+    content: '';
+    position: absolute;
+    /* Crear un espacio virtual enorme */
+    width: 5000px;
+    height: 5000px;
+    top: 0;
+    left: 0;
+    pointer-events: none;
 }
 
 .empty-state {

@@ -114,5 +114,3 @@ This project is open source under the MIT License - see [LICENSE](LICENSE) file 
 - Thanks to Firebase for the real-time database infrastructure
 
 ---
-
-**Made with ✨ for collaborative learning and teamwork**

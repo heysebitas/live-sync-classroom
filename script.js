@@ -117,15 +117,16 @@ function createNote() {
     // Color random de todos los disponibles
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     
-    // Posición que considere el scroll actual
+    // Posición que considere el scroll actual y dé más espacio
     const scrollTop = board.scrollTop;
     const scrollLeft = board.scrollLeft;
     
+    // Crear notas en un área mucho más grande (5000x5000)
     const note = {
         content: '',
         color: randomColor,
-        x: scrollLeft + Math.random() * Math.max(boardRect.width - 250, 100),
-        y: scrollTop + Math.random() * Math.max(boardRect.height - 200, 100),
+        x: scrollLeft + Math.random() * 800,
+        y: scrollTop + Math.random() * 600,
         timestamp: Date.now()
     };
     
