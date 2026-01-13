@@ -21,7 +21,6 @@ let selectedColor = colors[Math.floor(Math.random() * colors.length)];
 let draggedNote = null;
 let userId = 'user_' + Math.random().toString(36).substr(2, 9);
 
-// Sistema de zoom
 let currentZoom = 1;
 const minZoom = 0.3;
 const maxZoom = 2;
@@ -122,14 +121,11 @@ function createNote() {
     const board = document.getElementById('board');
     const boardRect = board.getBoundingClientRect();
     
-    // Color random de todos los disponibles
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     
-    // Posición que considere el scroll actual y dé más espacio
     const scrollTop = board.scrollTop;
     const scrollLeft = board.scrollLeft;
     
-    // Crear notas en un área mucho más grande (5000x5000)
     const note = {
         content: '',
         color: randomColor,
@@ -152,6 +148,7 @@ function createNoteElement(id, note) {
     
     noteEl.innerHTML = `
         <div class="note-header">
+            <button class="drag-btn" data-id="${id}">✋</button>
             <button class="delete-btn" onclick="deleteNote('${id}')">×</button>
         </div>
         <textarea class="note-content" placeholder="Escribe aquí...">${note.content || ''}</textarea>
@@ -164,6 +161,9 @@ function createNoteElement(id, note) {
     
     noteEl.addEventListener('dragstart', handleDragStart);
     noteEl.addEventListener('dragend', handleDragEnd);
+    
+    const dragBtn = noteEl.querySelector('.drag-btn');
+    setupTouchDrag(noteEl, dragBtn, id);
     
     boardContent.appendChild(noteEl);
 }
@@ -183,8 +183,8 @@ function setupBoardDragDrop() {
         const scrollTop = board.scrollTop;
         const scrollLeft = board.scrollLeft;
         
-        const x = e.clientX - boardRect.left + scrollLeft - 110;
-        const y = e.clientY - boardRect.top + scrollTop - 90;
+        const x = (e.clientX - boardRect.left + scrollLeft) / currentZoom - 110;
+        const y = (e.clientY - boardRect.top + scrollTop) / currentZoom - 90;
         
         const noteId = draggedNote.dataset.id;
         set(ref(database, `notes/${noteId}/x`), Math.max(0, x));
@@ -195,11 +195,68 @@ function setupBoardDragDrop() {
 function handleDragStart(e) {
     draggedNote = e.target;
     e.target.classList.add('dragging');
+    const ghost = e.target.cloneNode(true);
+    ghost.style.transform = `scale(${1/currentZoom})`;
+    ghost.style.position = 'absolute';
+    ghost.style.top = '-1000px';
+    document.body.appendChild(ghost);
+    e.dataTransfer.setDragImage(ghost, 110, 90);
+    setTimeout(() => ghost.remove(), 0);
 }
 
 function handleDragEnd(e) {
     e.target.classList.remove('dragging');
     draggedNote = null;
+}
+
+function setupTouchDrag(noteEl, dragBtn, noteId) {
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
+    
+    dragBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isDragging = true;
+        noteEl.classList.add('dragging');
+        
+        const touch = e.touches[0];
+        const board = document.getElementById('board');
+        const boardRect = board.getBoundingClientRect();
+        
+        startX = touch.clientX;
+        startY = touch.clientY;
+        
+        const noteRect = noteEl.getBoundingClientRect();
+        initialX = (noteRect.left - boardRect.left + board.scrollLeft) / currentZoom;
+        initialY = (noteRect.top - boardRect.top + board.scrollTop) / currentZoom;
+    });
+    
+    dragBtn.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        const touch = e.touches[0];
+        const deltaX = (touch.clientX - startX) / currentZoom;
+        const deltaY = (touch.clientY - startY) / currentZoom;
+        
+        const newX = Math.max(0, initialX + deltaX);
+        const newY = Math.max(0, initialY + deltaY);
+        
+        noteEl.style.left = newX + 'px';
+        noteEl.style.top = newY + 'px';
+    });
+    
+    dragBtn.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        isDragging = false;
+        noteEl.classList.remove('dragging');
+        
+        const x = parseFloat(noteEl.style.left);
+        const y = parseFloat(noteEl.style.top);
+        
+        set(ref(database, `notes/${noteId}/x`), x);
+        set(ref(database, `notes/${noteId}/y`), y);
+    });
 }
 
 window.deleteNote = function(noteId) {
@@ -210,11 +267,9 @@ window.deleteNote = function(noteId) {
 
 window.createNote = createNote;
 
-// Funciones de zoom
 function setupZoom() {
     const boardContent = document.getElementById('boardContent');
     
-    // Soporte para pinch-to-zoom en móvil
     let initialDistance = 0;
     let initialZoom = 1;
     
@@ -242,10 +297,9 @@ function getDistance(touch1, touch2) {
 }
 
 function detectMobileAndSetZoom() {
-    // Detectar si es móvil y establecer zoom inicial reducido
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if (isMobile) {
-        setZoom(0.5); // Vista alejada por defecto en móvil
+        setZoom(0.5);
     }
 }
 
@@ -255,7 +309,6 @@ function setZoom(zoom) {
     boardContent.style.transform = `scale(${currentZoom})`;
     boardContent.style.transformOrigin = '0 0';
     
-    // Ajustar el tamaño del contenedor para mantener el scroll
     boardContent.style.width = `${100 / currentZoom}%`;
     boardContent.style.height = `${100 / currentZoom}%`;
     

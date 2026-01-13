@@ -24,11 +24,35 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 h1 {
     color: #333;
     font-size: 1.8rem;
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.header-credits {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.header-credits a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.header-credits a:hover {
+    text-decoration: underline;
 }
 
 .user-count {
@@ -104,44 +128,37 @@ h1 {
     box-shadow: 0 0 0 2px #667eea;
 }
 
-.zoom-controls {
+.zoom-controls-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
     display: flex;
     gap: 8px;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 8px 12px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }
 
-.zoom-btn {
-    background: white;
+.zoom-btn-float {
+    background: rgba(255, 255, 255, 0.95);
     border: 2px solid #667eea;
     color: #667eea;
-    width: 36px;
-    height: 36px;
-    border-radius: 6px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
     transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.zoom-btn:hover {
+.zoom-btn-float:hover {
     background: #667eea;
     color: white;
-    transform: scale(1.05);
-}
-
-.zoom-level {
-    min-width: 50px;
-    text-align: center;
-    font-weight: 600;
-    color: #667eea;
-    font-size: 14px;
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
 .clear-btn {
@@ -163,7 +180,7 @@ h1 {
 .board-container {
     flex: 1;
     width: 100%;
-    margin: 0 auto 20px;
+    margin: 0 auto;
     overflow: hidden;
     position: relative;
 }
@@ -173,7 +190,6 @@ h1 {
     height: calc(100vh - 250px);
     overflow: auto;
     position: relative;
-    /* Scrollbars personalizados */
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
@@ -202,7 +218,6 @@ h1 {
     min-height: 5000px;
     position: relative;
     transition: transform 0.2s ease;
-    /* Grid de fondo */
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
@@ -250,8 +265,31 @@ h1 {
 
 .note-header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 8px;
+    gap: 8px;
+}
+
+.drag-btn {
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: grab;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    touch-action: none;
+}
+
+.drag-btn:active {
+    cursor: grabbing;
+    background: rgba(102, 126, 234, 0.3);
 }
 
 .delete-btn {
@@ -310,23 +348,6 @@ h1 {
     background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
 }
 
-footer {
-    text-align: center;
-    color: white;
-    padding: 20px;
-    opacity: 0.8;
-}
-
-footer a {
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
 @media (max-width: 768px) {
     h1 {
         font-size: 1.3rem;
@@ -336,6 +357,23 @@ footer a:hover {
         flex-direction: column;
         gap: 10px;
         text-align: center;
+    }
+    
+    .header-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .header-credits {
+        font-size: 0.8rem;
+    }
+    
+    .zoom-controls-float {
+        display: none;
+    }
+    
+    .drag-btn {
+        display: flex;
     }
     
     .controls {
