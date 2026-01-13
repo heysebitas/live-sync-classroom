@@ -16,10 +16,11 @@ body {
 }
 
 header {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 10px 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+    padding: 12px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     flex-shrink: 0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .header-content {
@@ -36,25 +37,28 @@ header {
 }
 
 h1 {
-    color: #333;
+    color: white;
     font-size: 1.8rem;
     margin-bottom: 5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .header-subtitle {
-    color: #666;
+    color: rgba(255, 255, 255, 0.9);
     font-size: 0.9rem;
     margin: 0;
     line-height: 1.4;
 }
 
 .header-subtitle a {
-    color: #667eea;
+    color: #fde047;
     text-decoration: none;
     font-weight: 600;
+    transition: all 0.3s;
 }
 
 .header-subtitle a:hover {
+    color: #fef08a;
     text-decoration: underline;
 }
 
@@ -67,22 +71,31 @@ h1 {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #666;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 500;
     font-size: 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     white-space: nowrap;
 }
 
 .pulse {
     width: 10px;
     height: 10px;
-    background: #10b981;
+    background: #4ade80;
     border-radius: 50%;
     animation: pulse 2s infinite;
+    box-shadow: 0 0 10px #4ade80;
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+
 }
 
 .controls {
