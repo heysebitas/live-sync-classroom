@@ -1,0 +1,243 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    color: #333;
+    font-size: 1.8rem;
+}
+
+.user-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.pulse {
+    width: 10px;
+    height: 10px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.controls {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.add-note-btn {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.add-note-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.color-picker {
+    display: flex;
+    gap: 8px;
+}
+
+.color-btn {
+    width: 36px;
+    height: 36px;
+    border: 3px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.color-btn:hover {
+    transform: scale(1.1);
+}
+
+.color-btn.active {
+    border-color: white;
+    box-shadow: 0 0 0 2px #667eea;
+}
+
+.clear-btn {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.3s;
+}
+
+.clear-btn:hover {
+    background: rgb(220, 38, 38);
+}
+
+.board {
+    flex: 1;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto 20px;
+    padding: 20px;
+    position: relative;
+    min-height: 500px;
+}
+
+.empty-state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    opacity: 0.7;
+}
+
+.empty-state p {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.sticky-note {
+    position: absolute;
+    width: 200px;
+    min-height: 150px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: move;
+    transition: box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.sticky-note:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.sticky-note.dragging {
+    opacity: 0.5;
+}
+
+.note-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+
+.delete-btn {
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.delete-btn:hover {
+    background: rgba(239, 68, 68, 0.8);
+    color: white;
+}
+
+.note-content {
+    flex: 1;
+    border: none;
+    background: transparent;
+    resize: none;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+}
+
+.note-yellow { background: #fef08a; }
+.note-pink { background: #fbcfe8; }
+.note-blue { background: #bfdbfe; }
+.note-green { background: #bbf7d0; }
+.note-orange { background: #fed7aa; }
+.note-purple { background: #e9d5ff; }
+
+footer {
+    text-align: center;
+    color: white;
+    padding: 20px;
+    opacity: 0.8;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.3rem;
+    }
+    
+    .controls {
+        justify-content: center;
+    }
+    
+    .clear-btn {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .sticky-note {
+        width: 160px;
+        min-height: 120px;
+    }
+}

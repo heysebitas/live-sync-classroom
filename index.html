@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muro Colaborativo en Vivo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>📌 Muro Colaborativo</h1>
+            <div class="header-info">
+                <span class="user-count">
+                    <span class="pulse"></span>
+                    <span id="userCount">0</span> usuarios conectados
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <div class="controls">
+        <button class="add-note-btn" onclick="createNote()">
+            + Nueva Nota
+        </button>
+        <div class="color-picker">
+            <button class="color-btn" data-color="yellow" style="background: #fef08a"></button>
+            <button class="color-btn" data-color="pink" style="background: #fbcfe8"></button>
+            <button class="color-btn" data-color="blue" style="background: #bfdbfe"></button>
+            <button class="color-btn" data-color="green" style="background: #bbf7d0"></button>
+            <button class="color-btn" data-color="orange" style="background: #fed7aa"></button>
+            <button class="color-btn active" data-color="purple" style="background: #e9d5ff"></button>
+        </div>
+        <button class="clear-btn" onclick="clearAllNotes()">
+            🗑️ Limpiar Todo
+        </button>
+    </div>
+
+    <div class="board" id="board">
+        <div class="empty-state" id="emptyState">
+            <p>👆 Haz clic en "Nueva Nota" para empezar</p>
+            <small>Las notas se sincronizan en tiempo real con todos</small>
+        </div>
+    </div>
+
+    <footer>
+        <p>Creado para Global Hack Week • <a href="https://github.com/MLH" target="_blank">MLH</a></p>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
