@@ -11,15 +11,14 @@
 <body>
     <header>
         <div class="header-content">
-            <h1>📌 Muro Colaborativo</h1>
+            <div class="header-left">
+                <h1>📌 Muro Colaborativo en Tiempo Real</h1>
+                <p class="header-subtitle">Notas colaborativas con sincronización instantánea • Creado por <a href="https://github.com/heysebitas" target="_blank">Sebas</a> para <a href="https://github.com/MLH" target="_blank">MLH Global Hack Week</a></p>
+            </div>
             <div class="header-info">
                 <span class="user-count">
                     <span class="pulse"></span>
-                    <span id="userCount">0</span> usuarios conectados
-                </span>
-                <span class="header-credits">
-                    por <a href="https://github.com/heysebitas" target="_blank">Sebas</a> - 
-                    <a href="https://github.com/MLH" target="_blank">MLH</a>
+                    <span id="userCount">0</span> en línea
                 </span>
             </div>
         </div>
@@ -39,11 +38,12 @@
         </div>
     </div>
 
+    <div class="zoom-controls-float">
+        <button class="zoom-btn-float" onclick="zoomOut()" title="Alejar">−</button>
+        <button class="zoom-btn-float" onclick="zoomIn()" title="Acercar">+</button>
+    </div>
+
     <div class="board-container">
-        <div class="zoom-controls-float">
-            <button class="zoom-btn-float" onclick="zoomOut()" title="Alejar">−</button>
-            <button class="zoom-btn-float" onclick="zoomIn()" title="Acercar">+</button>
-        </div>
         <div class="board" id="board">
             <div class="board-content" id="boardContent">
                 <div class="empty-state" id="emptyState">

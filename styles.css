@@ -24,35 +24,39 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
+}
+
+.header-left {
+    flex: 1;
 }
 
 h1 {
     color: #333;
     font-size: 1.8rem;
+    margin-bottom: 5px;
 }
 
-.header-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.header-credits {
+.header-subtitle {
     color: #666;
     font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.4;
 }
 
-.header-credits a {
+.header-subtitle a {
     color: #667eea;
     text-decoration: none;
     font-weight: 600;
 }
 
-.header-credits a:hover {
+.header-subtitle a:hover {
     text-decoration: underline;
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
 }
 
 .user-count {
@@ -61,6 +65,7 @@ h1 {
     gap: 8px;
     color: #666;
     font-size: 0.95rem;
+    white-space: nowrap;
 }
 
 .pulse {
@@ -192,6 +197,11 @@ h1 {
     position: relative;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    cursor: grab;
+}
+
+.board:active {
+    cursor: grabbing;
 }
 
 .board::-webkit-scrollbar {
@@ -359,13 +369,16 @@ h1 {
         text-align: center;
     }
     
-    .header-info {
-        flex-direction: column;
-        gap: 8px;
+    .header-left {
+        text-align: center;
     }
     
-    .header-credits {
+    .header-subtitle {
         font-size: 0.8rem;
+    }
+    
+    .header-info {
+        justify-content: center;
     }
     
     .zoom-controls-float {
@@ -374,6 +387,10 @@ h1 {
     
     .drag-btn {
         display: flex;
+    }
+    
+    .sticky-note {
+        cursor: default;
     }
     
     .controls {

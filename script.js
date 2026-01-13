@@ -33,6 +33,7 @@ function init() {
     setupBoardDragDrop();
     setupZoom();
     detectMobileAndSetZoom();
+    setupBoardPanning();
 }
 
 function setupColorPicker() {
@@ -266,6 +267,44 @@ window.deleteNote = function(noteId) {
 }
 
 window.createNote = createNote;
+
+function setupBoardPanning() {
+    const board = document.getElementById('board');
+    let isPanning = false;
+    let startX, startY, scrollLeft, scrollTop;
+    
+    board.addEventListener('mousedown', (e) => {
+        if (e.target === board || e.target.id === 'boardContent' || e.target.classList.contains('empty-state')) {
+            isPanning = true;
+            board.style.cursor = 'grabbing';
+            startX = e.pageX - board.offsetLeft;
+            startY = e.pageY - board.offsetTop;
+            scrollLeft = board.scrollLeft;
+            scrollTop = board.scrollTop;
+        }
+    });
+    
+    board.addEventListener('mousemove', (e) => {
+        if (!isPanning) return;
+        e.preventDefault();
+        const x = e.pageX - board.offsetLeft;
+        const y = e.pageY - board.offsetTop;
+        const walkX = (x - startX) * 1.5;
+        const walkY = (y - startY) * 1.5;
+        board.scrollLeft = scrollLeft - walkX;
+        board.scrollTop = scrollTop - walkY;
+    });
+    
+    board.addEventListener('mouseup', () => {
+        isPanning = false;
+        board.style.cursor = 'grab';
+    });
+    
+    board.addEventListener('mouseleave', () => {
+        isPanning = false;
+        board.style.cursor = 'grab';
+    });
+}
 
 function setupZoom() {
     const boardContent = document.getElementById('boardContent');
